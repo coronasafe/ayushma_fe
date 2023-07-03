@@ -24,18 +24,26 @@ export type Document = BaseModelType & {
     file?: string,
 }
 
+export type ChatFeedback = {
+  chat_message: number;
+  liked: boolean;
+  message: string;
+} | null;
+
 export type ChatMessage = BaseModelType & {
-    messageType: ChatMessageType,
-    message: string,
-    translated_message?: string,
-    reference_documents?: Document[],
-    audio?: string,
-    language: string,
-    original_message: string
-    meta?: ChatMessageMeta,
-    top_k?: number,
-    temperature?: number,
-}
+  id: number;
+  messageType: ChatMessageType;
+  message: string;
+  translated_message?: string;
+  reference_documents?: Document[];
+  audio?: string;
+  language: string;
+  original_message: string;
+  meta?: ChatMessageMeta;
+  top_k?: number;
+  temperature?: number;
+  feedback: ChatFeedback;
+};
 
 export type ChatConverseStream = {
     chat: string,
