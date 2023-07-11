@@ -57,6 +57,19 @@ export default function Page({ params }: { params: { project_id: string } }) {
     }
   );
 
+
+  const archiveProjectMutation = useMutation(
+    () =>
+      API.projects.update(project_id, {
+        archived: !project?.archived,
+      }),
+    {
+      onSuccess: () => {
+        projectsQuery.refetch();
+      },
+    }
+  );
+
   const handleProjectSave = async (project: Partial<Project>) => {
     await updateProjectMutation.mutateAsync(project);
   };
@@ -64,6 +77,12 @@ export default function Page({ params }: { params: { project_id: string } }) {
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this project?")) {
       await deleteProjectMutation.mutateAsync();
+    }
+  };
+
+  const handleArchive = async () => {
+    if (confirm(`Are you sure you want to ${project?.archived ? "unarchive" : "archive"} this project?`)) {
+      await archiveProjectMutation.mutateAsync();
     }
   };
 
@@ -99,12 +118,15 @@ export default function Page({ params }: { params: { project_id: string } }) {
             {document.title}
           </Link>
         ))}
-        <Link
-          href={`/admin/projects/${project_id}/documents/new`}
-          className="border border-dashed border-gray-300 hover:bg-gray-100 bg-white rounded-lg p-4"
-        >
-          <i className="far fa-plus" /> New Document
-        </Link>
+        {!project?.archived && (
+          <Link
+            href={`/admin/projects/${project_id}/documents/new`}
+            className="border border-dashed border-gray-300 hover:bg-gray-100 bg-white rounded-lg p-4"
+          >
+            <i className="far fa-plus" /> New Document
+          </Link>
+        )}
+        {project?.archived && documents?.length === 0 && ( "No documents" )}
       </div>
       <h2 className="text-2xl mt-6 font-bold mb-4">Details</h2>
       {project && (
@@ -117,7 +139,11 @@ export default function Page({ params }: { params: { project_id: string } }) {
       )}
       <div className="flex gap-2 mt-4 items-center justify-stretch">
         <Button className="w-full" variant="danger" onClick={handleDelete}>
+          <i className="fa-regular fa-trash mr-2"></i>
           Delete Project
+        </Button>
+        <Button className="w-full bg-blue-500 enabled:hover:bg-blue-600" onClick={handleArchive}>
+          <i className="fa-regular fa-box-archive mr-2"></i> {project?.archived ? "Unarchive" : "Archive"} Project
         </Button>
         <Button
           variant="secondary"

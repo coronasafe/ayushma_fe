@@ -7,6 +7,7 @@ export type Project = BaseModelType & {
     prompt?: string,
     stt_engine: number,
     model: number,
+    archived: boolean,
 }
 
 export enum DocumentType {

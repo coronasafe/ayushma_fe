@@ -86,7 +86,7 @@ export default function ProjectForm(props: {
           ))}
         </select>
         <Button loading={loading} type="submit" className="mt-4">
-          {pro.external_id ? "Save" : "Create"}
+        <i className="fa-regular fa-floppy-disk mr-2"></i>{pro.external_id ? "Save" : "Create"}
         </Button>
       </form>
     </div>

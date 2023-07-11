@@ -4,6 +4,7 @@ import ChatBar from "@/components/chatbar";
 import ChatBlock from "@/components/chatblock";
 import { storageAtom } from "@/store";
 import { Chat, ChatConverseStream, ChatMessageType } from "@/types/chat";
+import { Project } from "@/types/project";
 import { API } from "@/utils/api";
 import { getFormData } from "@/utils/converse";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -14,6 +15,8 @@ import { useEffect, useRef, useState } from "react";
 export default function Chat(params: { params: { project_id: string, chat_id: string } }) {
 
     const { project_id, chat_id } = params.params;
+    const projectQuery = useQuery(["project", project_id], () => API.projects.get(project_id));
+    const project: Project | undefined = projectQuery.data || undefined;
     const searchParams = useSearchParams();
     const shouldAutoPlay = searchParams?.get("autoplay") !== null;
     const [newChat, setNewChat] = useState("");
@@ -92,6 +95,7 @@ export default function Chat(params: { params: { project_id: string, chat_id: st
             </div >
             <div className="w-full shrink-0 p-4">
                 <ChatBar
+                    disabled={project?.archived}
                     chat={newChat || ""}
                     onChange={(e) => setNewChat(e.target.value)}
                     onSubmit={handleSubmit}

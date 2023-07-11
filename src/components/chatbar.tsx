@@ -15,9 +15,10 @@ export default function ChatBar(props: {
     onAudio: (blobUrl: string) => void,
     errors: string[],
     loading?: boolean
+    disabled?: boolean
 }) {
 
-    const { chat, onChange, onSubmit, errors, loading, onAudio } = props;
+    const { chat, onChange, onSubmit, errors, loading, onAudio, disabled } = props;
 
     const [storage, setStorage] = useAtom(storageAtom);
 
@@ -72,6 +73,7 @@ export default function ChatBar(props: {
             </Modal>
             <form onSubmit={onSubmit}>
                 <Input
+                    disabled={disabled}
                     type="text"
                     placeholder="Chat"
                     value={chat || ""}
