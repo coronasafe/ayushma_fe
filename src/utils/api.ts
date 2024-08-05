@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ChatConverseStream, ChatFeedbackType } from "@/types/chat";
 import {
@@ -438,6 +438,8 @@ export const API = {
   feedback: {
     create: (feedback: Partial<ChatFeedbackType>) =>
       request(`feedback`, "POST", { ...feedback }),
+    list: (project_id: string, chat_id: string) =>
+      request(`projects/${project_id}/chats/${chat_id}/feedbacks`, "GET"),
   },
   users: {
     get: (username: string) => request(`users/${username}`, "GET"),
